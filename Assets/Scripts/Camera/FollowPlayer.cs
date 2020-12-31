@@ -20,7 +20,8 @@ public class FollowPlayer : MonoBehaviour
     void Update()
     {
         // Setting the cameraOffset
-        cameraOffset = new Vector3(0, 1, -10);
+        cameraOffset = new Vector3(
+            0, 1, -10);
 
         // Moving the camera alongside the player position
         transform.position = player.transform.position + cameraOffset;
