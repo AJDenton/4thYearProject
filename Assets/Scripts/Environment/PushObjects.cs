@@ -11,11 +11,17 @@ public class PushObjects : MonoBehaviour
     //The player gameObject
     public GameObject player;
 
+    public float time = 5f;
+
+    public Rigidbody objectRb;
+
     // Start is called before the first frame update
     void Start()
     {
         //Finding the player gameObject from within the scene
         player = GameObject.Find("Player");
+
+        objectRb = GetComponent<Rigidbody>();
         
     }
 
@@ -36,13 +42,36 @@ public class PushObjects : MonoBehaviour
         //Detecting the distance between the object and the player
         objectDist = Vector3.Distance(transform.position, player.transform.position);
 
+        //Button Mashing System
         //If the distance between the object and player is less than the pushDist, the player can pick up and push the object
-        if (objectDist <= pushDist && Input.GetMouseButton(0))
+        if (objectDist <= pushDist && Input.GetMouseButtonDown(0))
         {
+            //Start the timer
+            //StartCoroutine(PushCoRoutine());
+
+            //Push the object away in once impulse
+            objectRb.AddForce(new Vector3(1000, 0, 0), ForceMode.Impulse);
+
+            //Debug.Log("HEYHEY");
+            //gameObject.transform.position = pushOffsetRight;
+            //Slow the player down
+            //playerController.speed = playerController.speed / 2;
+            
+        }
+        //If the distance between the object and player is less than the pushDist, the player can pick up and push the object
+        if (objectDist <= pushDist && Input.GetMouseButton(1))
+        {
+            //Start the timer
+            //StartCoroutine(PushCoRoutine());
+
+            //Push the object away in once impulse
+            //objectRb.AddForce(new Vector3(100, 0, 0), ForceMode.Impulse);
+
             //Debug.Log("HEYHEY");
             gameObject.transform.position = pushOffsetRight;
             //Slow the player down
-            playerController.speed = playerController.speed / 2;
+            playerController.speed = 4;
+
         }
         else
         {
@@ -50,4 +79,11 @@ public class PushObjects : MonoBehaviour
             playerController.speed = 8;
         }
     }
+
+    IEnumerator PushCoRoutine()
+    {
+        yield return new WaitForSeconds(time);
+        Debug.Log("Finish");
+    }
+
 }
