@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour {
     //Jump force for player to jump upwards on Y axis
     public float jumpForce = 8.0f;
     //Boolean to check if the player is on the ground (for jumping)
-    public bool isGrounded = true;
+    public bool isGrounded;
     //Obtaining the rigidbody for the player
     public Rigidbody playerRB;
 
@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+
         //Assigning the horizInput to Unity's horizontal axis inputs
         horizInput = Input.GetAxis("Horizontal");
         //Making movement for the player's horizontal movements
@@ -46,7 +47,7 @@ public class PlayerController : MonoBehaviour {
     private void OnCollisionEnter(Collision collision)
     {
         //Check if the player is touching another object with the tag "Ground"
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject)
         {
             //Making the isGrounded bool equal true if the player is colliding with the ground
             isGrounded = true;

@@ -5,13 +5,11 @@ using UnityEngine;
 public class PushObjects : MonoBehaviour
 {
     //Distance between the object and the player
-    public float objectDist;
+    private float objectDist;
     //Distance in which the player can interact with the object
-    public float pushDist = 2f;
+    private float pushDist = 2f;
     //The player gameObject
     public GameObject player;
-
-
 
     // Start is called before the first frame update
     void Start()
@@ -24,8 +22,8 @@ public class PushObjects : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Calling the moveObjects function
         moveObjects();
-
     }
 
     void moveObjects()
@@ -45,7 +43,6 @@ public class PushObjects : MonoBehaviour
             gameObject.transform.position = pushOffsetRight;
             //Slow the player down
             playerController.speed = playerController.speed / 2;
-
         }
         else
         {
