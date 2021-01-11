@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
+  - PushBox
   layers:
   - Default
   - TransparentFX
