@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
+   
+
+    //Starting/full health 
     public int fullHealth = 10;
     //Health for the player
     public int health;
@@ -17,7 +20,7 @@ public class PlayerController : MonoBehaviour {
     //Seeting the move value to the pre-defined control scheme (Horizontal) in Unity.
     public float horizInput;
     //Jump force for player to jump upwards on Y axis
-    public float jumpForce = 8.0f;
+    public float jumpForce = 30f;
     //Set amount od force for knockback during enemy collision
     public float knockBackForce = 10;
     //How long the damage will last/how long it will be until the player can be damaged again
@@ -47,7 +50,7 @@ public class PlayerController : MonoBehaviour {
     // Start is called before the first frame update
     void Start()
     {
-
+        //Setting health to full health at start of game
         health = fullHealth;
         //Finding the interactive gameObject from within the scene
         pushObject = GameObject.FindGameObjectWithTag("PushBox");
@@ -66,27 +69,34 @@ public class PlayerController : MonoBehaviour {
         //Calling functions
         moveObjects();
         GameOver();
+        PlayerMovement();
+
 
         //Assigning the horizInput to Unity's horizontal axis inputs
-        horizInput = Input.GetAxis("Horizontal");
+        //horizInput = Input.GetAxis("Horizontal");
         //Making movement for the player's horizontal movements
-        transform.Translate(Vector3.right * speed * Time.deltaTime * horizInput);
+        //transform.Translate(Vector3.right * speed * Time.deltaTime * horizInput);
 
         //Checking if the player is on the ground and if the player has input the Space key
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded == true)
+        /*if (Input.GetKeyDown(KeyCode.Space) && isGrounded == true)
         { 
             //Adding force to the players rigidbody to create a jump
             playerRB.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             //Making the isGrounded bool equal false when the player is not touching the ground
             isGrounded = false;
-        }
-        
+        }*/
 
     }
 
     //Checking for collisions on the gameObject (player)
     private void OnCollisionEnter(Collision other)
     {
+
+        if (other.gameObject)
+        {
+            isGrounded = true;
+        } 
+        
         //Checking if the player is colliding with a gameObject with the Tag "Hazard"
         if (other.gameObject.CompareTag("Hazard"))
         {
@@ -105,9 +115,26 @@ public class PlayerController : MonoBehaviour {
             }
         }
 
-        if (other.gameObject)
+        
+    }
+
+    void PlayerMovement()
+    {
+        if (Input.GetKey(GameManager.GM.left))
         {
-            isGrounded = true;
+            transform.position += Vector3.left * speed * Time.deltaTime;
+        }
+
+        if (Input.GetKey(GameManager.GM.right))
+        {
+            transform.position += Vector3.right * speed * Time.deltaTime;
+        }
+
+        if (Input.GetKeyDown(GameManager.GM.jump) && isGrounded == true)
+        {
+            //Debug.Log("HECK");
+            playerRB.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            isGrounded = false;
         }
     }
 

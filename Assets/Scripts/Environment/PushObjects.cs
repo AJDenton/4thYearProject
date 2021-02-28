@@ -16,7 +16,7 @@ public class PushObjects : MonoBehaviour
     void Start()
     {
         //Finding the player gameObject from within the scene
-        player = GameObject.Find("Player");
+        //player = GameObject.Find("Player");
 
         objectRb = GetComponent<Rigidbody>();
         
