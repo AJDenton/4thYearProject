@@ -10,32 +10,46 @@ public class SlowDownTime : MonoBehaviour
     public float normalSpeed = 1.0f;
     public bool slowMo = false;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
+        //slowMotion();
+    }
+
+    //When the player enters a trigger area
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Player") { 
         slowMotion();
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.tag == "Player") { 
+        regularSpeed();
+        }
     }
 
     void slowMotion()
     {
-        if (Input.GetKey(KeyCode.Z) && slowMo == false)
-        {
             slowMo = true;
             Time.timeScale = slowDownSpeed;
-            StartCoroutine(SlowMoCoroutine());
-        }
+            Debug.Log("Slow Motion Working");
+            //StartCoroutine(SlowMoCoroutine());
     }
 
-    IEnumerator SlowMoCoroutine()
+    void regularSpeed()
+    {
+        slowMo = false;
+        Time.timeScale = normalSpeed;
+        //StartCoroutine(SlowMoCoroutine());
+    }
+
+/*    IEnumerator SlowMoCoroutine()
     {
         yield return new WaitForSeconds(slowTimer);
         slowMo = false;
         Time.timeScale = normalSpeed;
-    }    
+    } */   
 }
