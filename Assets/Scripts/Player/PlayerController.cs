@@ -1,15 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour {
 
-   
-
-    //Starting/full health 
-    public int fullHealth = 10;
+   //Starting/full health 
+    public int fullHealth = 100;
     //Health for the player
     public int health;
+
 
     //Distance between the object and the player
     private float objectDist;
@@ -42,6 +43,10 @@ public class PlayerController : MonoBehaviour {
     //Game Object for the dangers
     public GameObject hazard;
 
+    
+    //Reference to my animator controller
+    public Animator playerAnim;
+
     private int Health { get { return health; } }
     private Danger dangerScript;
 
@@ -50,6 +55,7 @@ public class PlayerController : MonoBehaviour {
     // Start is called before the first frame update
     void Start()
     {
+        Time.timeScale = 1f;
         //Setting health to full health at start of game
         health = fullHealth;
         //Finding the interactive gameObject from within the scene
@@ -59,6 +65,9 @@ public class PlayerController : MonoBehaviour {
         //Assigning the rigidbody to a variable
         playerRB = GetComponent<Rigidbody>();
 
+        //Assigning the animation controller 
+        playerAnim = GetComponent<Animator>();
+
         //getting the script of the environmental dangers in the scene
         dangerScript = hazard.GetComponent<Danger>();
     }
@@ -67,11 +76,10 @@ public class PlayerController : MonoBehaviour {
     void Update()
     {
         //Calling functions
+        PlayerMovement();
         moveObjects();
         GameOver();
-        PlayerMovement();
-
-
+        
         //Assigning the horizInput to Unity's horizontal axis inputs
         //horizInput = Input.GetAxis("Horizontal");
         //Making movement for the player's horizontal movements
@@ -138,6 +146,8 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+
+
     //CoRoutine for when damage is taken, this will allow halfa second to not lose health
     IEnumerator DamageRoutine()
     {
@@ -200,21 +210,26 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    //Hold the object
     void InteractParent()
     {
         pushObject.transform.parent = gameObject.transform;
     }
 
+    //Stop holding the object
     void DisableInteractParent()
     {
         pushObject.transform.parent = null;
     }
 
+
+    //If gameOver is true, change the scene to the game over scene.
     void GameOver()
     {
         if(health <= 0)
         {
             gameOver = true;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             Debug.Log("Game Over!");
         }
     }
