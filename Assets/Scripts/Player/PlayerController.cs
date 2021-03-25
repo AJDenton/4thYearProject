@@ -27,12 +27,16 @@ public class PlayerController : MonoBehaviour {
     //How long the damage will last/how long it will be until the player can be damaged again
     public float damageDuration = 0.5f;
 
+    public float isMoving = 0f;
+
     //Boolean to check if the player is on the ground (for jumping)
     public bool isGrounded;
     //Checking if the game is over.
     public bool gameOver = false;
     //checking for whether the player is damaged or not
     private bool isDamaged;
+
+    private bool facingRight;
 
     //Obtaining the rigidbody for the player
     public Rigidbody playerRB;
@@ -70,6 +74,8 @@ public class PlayerController : MonoBehaviour {
 
         //getting the script of the environmental dangers in the scene
         dangerScript = hazard.GetComponent<Danger>();
+
+        facingRight = true;
     }
 
     // Update is called once per frame
@@ -131,17 +137,28 @@ public class PlayerController : MonoBehaviour {
         if (Input.GetKey(GameManager.GM.left))
         {
             transform.position += Vector3.left * speed * Time.deltaTime;
+            transform.rotation = Quaternion.Euler(new Vector3(0, 270, 0));
+            isMoving = 1f;
+            playerAnim.SetFloat("Speed", isMoving);
         }
-
-        if (Input.GetKey(GameManager.GM.right))
+        else if (Input.GetKey(GameManager.GM.right))
         {
             transform.position += Vector3.right * speed * Time.deltaTime;
+            transform.rotation = Quaternion.Euler(new Vector3(0, 90, 0));
+            isMoving = 1f;
+            playerAnim.SetFloat("Speed", isMoving);
+        }
+        else
+        {
+            isMoving = 0f;
+            playerAnim.SetFloat("Speed", isMoving);
         }
 
         if (Input.GetKeyDown(GameManager.GM.jump) && isGrounded == true)
         {
             //Debug.Log("HECK");
             playerRB.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            playerAnim.SetTrigger("jump");
             isGrounded = false;
         }
     }
