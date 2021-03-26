@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour {
     public float knockBackForce = 10;
     //How long the damage will last/how long it will be until the player can be damaged again
     public float damageDuration = 0.5f;
-
+    //Variable set up to be used to control animation states
     public float isMoving = 0f;
 
     //Boolean to check if the player is on the ground (for jumping)
@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour {
     //checking for whether the player is damaged or not
     private bool isDamaged;
 
-    private bool facingRight;
+
 
     //Obtaining the rigidbody for the player
     public Rigidbody playerRB;
@@ -48,13 +48,11 @@ public class PlayerController : MonoBehaviour {
     public GameObject hazard;
 
     
-    //Reference to my animator controller
+    //Reference to player animator controller
     public Animator playerAnim;
 
     private int Health { get { return health; } }
     private Danger dangerScript;
-
-
 
     // Start is called before the first frame update
     void Start()
@@ -74,8 +72,6 @@ public class PlayerController : MonoBehaviour {
 
         //getting the script of the environmental dangers in the scene
         dangerScript = hazard.GetComponent<Danger>();
-
-        facingRight = true;
     }
 
     // Update is called once per frame
@@ -85,21 +81,16 @@ public class PlayerController : MonoBehaviour {
         PlayerMovement();
         moveObjects();
         GameOver();
-        
-        //Assigning the horizInput to Unity's horizontal axis inputs
-        //horizInput = Input.GetAxis("Horizontal");
-        //Making movement for the player's horizontal movements
-        //transform.Translate(Vector3.right * speed * Time.deltaTime * horizInput);
+    }
 
-        //Checking if the player is on the ground and if the player has input the Space key
-        /*if (Input.GetKeyDown(KeyCode.Space) && isGrounded == true)
-        { 
-            //Adding force to the players rigidbody to create a jump
-            playerRB.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            //Making the isGrounded bool equal false when the player is not touching the ground
-            isGrounded = false;
-        }*/
-
+    //Health Pick UP system
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponent<HealthPickUp>()!= null)
+        {
+            HealthPickUp healthPickUp = other.GetComponent<HealthPickUp>();
+            health += healthPickUp.healthBonus;
+            Destroy(healthPickUp.gameObject);        }
     }
 
     //Checking for collisions on the gameObject (player)
@@ -156,11 +147,12 @@ public class PlayerController : MonoBehaviour {
 
         if (Input.GetKeyDown(GameManager.GM.jump) && isGrounded == true)
         {
-            //Debug.Log("HECK");
+            //Debug.Log("JUMP");
             playerRB.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             playerAnim.SetTrigger("jump");
             isGrounded = false;
         }
+
     }
 
 
@@ -173,6 +165,7 @@ public class PlayerController : MonoBehaviour {
         isDamaged = false;
     }
 
+
     void moveObjects()
     {
         //PlayerController playerController = player.GetComponent<PlayerController>();
@@ -183,44 +176,15 @@ public class PlayerController : MonoBehaviour {
         //Detecting the distance between the object and the player
         objectDist = Vector3.Distance(gameObject.transform.position, pushObject.transform.position);
 
-        //Button Mashing System
-        //If the distance between the object and player is less than the pushDist, the player can pick up and push the object
-/*        if (objectDist <= pushDist && Input.GetMouseButtonDown(0))
-        {
-            //Start the timer
-            //StartCoroutine(PushCoRoutine());
 
-
-
-            //Push the object away in once impulse
-            ///////////objectRb.AddForce(new Vector3(1000, 0, 0), ForceMode.Impulse);
-
-            //Debug.Log("HEYHEY");
-            //gameObject.transform.position = pushOffsetRight;
-            //Slow the player down
-            //playerController.speed = playerController.speed / 2;
-
-        }*/
         //If the distance between the object and player is less than the pushDist, the player can pick up and push the object
         if (objectDist <= pushDist && Input.GetMouseButton(0))
         {
-            //Start the timer
-            //StartCoroutine(PushCoRoutine());
-
-            //Push the object away in once impulse
-            //objectRb.AddForce(new Vector3(100, 0, 0), ForceMode.Impulse);
             InteractParent();
-
-            /////////////objectRb.transform.parent = gameObject.transform;
-            //Debug.Log("HEYHEY");
-            //gameObject.transform.position = pushOffsetRight;
-            //Slow the player down
             speed = 4;
-
         }
         else
         {
-
             DisableInteractParent();
             //Revert to the normal player speed
             speed = 8;
@@ -231,6 +195,7 @@ public class PlayerController : MonoBehaviour {
     void InteractParent()
     {
         pushObject.transform.parent = gameObject.transform;
+        playerAnim.SetTrigger("pushing");
     }
 
     //Stop holding the object
