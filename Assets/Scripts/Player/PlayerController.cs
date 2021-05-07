@@ -157,7 +157,7 @@ public class PlayerController : MonoBehaviour {
 
 
 
-    //CoRoutine for when damage is taken, this will allow halfa second to not lose health
+    //CoRoutine for when damage is taken, this will allow half a second to not lose health
     IEnumerator DamageRoutine()
     {
         //Setting the seconds to the damageDuration value

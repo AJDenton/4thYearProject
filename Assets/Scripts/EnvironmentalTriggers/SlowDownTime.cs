@@ -8,7 +8,7 @@ public class SlowDownTime : MonoBehaviour
     public float slowTimer = 3.0f;
     public float slowDownSpeed = 0.3f;
     public float normalSpeed = 1.0f;
-    public bool slowMo = false;
+
 
     //When the player enters a trigger area
     private void OnTriggerEnter(Collider other)
@@ -26,24 +26,13 @@ public class SlowDownTime : MonoBehaviour
     }
 
     void slowMotion()
-    {
-            slowMo = true;
+    {            
             Time.timeScale = slowDownSpeed;
-            //Debug.Log("Slow Motion Working");
-            //StartCoroutine(SlowMoCoroutine());
     }
 
     void regularSpeed()
     {
-        slowMo = false;
         Time.timeScale = normalSpeed;
-        //StartCoroutine(SlowMoCoroutine());
     }
 
-/*    IEnumerator SlowMoCoroutine()
-    {
-        yield return new WaitForSeconds(slowTimer);
-        slowMo = false;
-        Time.timeScale = normalSpeed;
-    } */   
 }

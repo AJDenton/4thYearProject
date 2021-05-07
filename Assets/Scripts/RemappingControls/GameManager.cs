@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     public KeyCode jump { get; set; }
     public KeyCode left { get; set; }
     public KeyCode right { get; set; }
-    //public KeyCode grab { get; set; }
+
 
 
     private void Awake()
